@@ -1,0 +1,12 @@
+urld <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+download.file(urld, "Dataset.zip")
+unzip("Dataset.zip")
+household <- read.table("household_power_consumption.txt", header = TRUE, sep = ";")
+household$Date <- as.Date(household$Date, "%d/%m/%Y")
+household$Time <- strptime(household$Time, "%H:%M:%S")
+household$Time <- sub(".*\\s+", "",  household$Time)
+filteredset <- subset(household, Date == "2007-02-01" | Date == "2007-02-02")
+filteredset$Global_active_power <- as.numeric(as.character(filteredset$Global_active_power))
+png(filename = "plot1.png", width = 480, height = 480)
+hist(filteredset$Global_active_power, main = "Global Active Power", xlab ="Global Active Power (kilowatts)", col = "red", ylim = c(0,1200))
+dev.off()
